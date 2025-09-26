@@ -8,7 +8,8 @@ class TestHelloSolution():
         # assert HelloSolution().hello("Linda") == "Hello Linda"
         assert HelloSolution().hello("Linda") == "Hello, World!"
 
-    # def test_hello_error(self):
-    #     with pytest.raises(TypeError):
-    #         HelloSolution().hello(2)
+    def test_hello_error(self):
+        with pytest.raises(TypeError):
+            HelloSolution().hello(2)
+
 
