@@ -14,7 +14,13 @@ class CheckoutSolution:
         if not isinstance(skus, str):
             return -1
 
-        validate = [sku for sku in skus if sku not in prices]
+        for sku in skus:
+            if sku not in prices:
+                print('sku: ', sku)
+                print()
+
+        validate = [sku.strip() for sku in skus if sku.strip() not in prices and sku.strip() != ""]
+        print('validate: ', validate)
 
         if len(validate) > 0:
             print('fail')
@@ -38,5 +44,3 @@ class CheckoutSolution:
             total += num_offers * offer_price + remainder * prices[item]
 
         return total
-
-
