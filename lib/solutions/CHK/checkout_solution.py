@@ -82,6 +82,8 @@ class CheckoutSolution:
             # bundle_prices = price_list[:bundle_count * self.group_offer_size]
             remaining_prices = price_list[bundle_count * self.group_offer_size:]
             bundle_total = bundle_count * self.group_offer_price + sum(remaining_prices)
+            print('bundle_total: ', bundle_total)
+            print()
 
         total = 0
         total += bundle_total
@@ -166,6 +168,7 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
 
 
 
