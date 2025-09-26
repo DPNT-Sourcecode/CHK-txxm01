@@ -5,9 +5,14 @@ class CheckoutSolution:
     def checkout(self, skus: str) -> int:
         # Prices and special offers
         prices = {"A": 50, "B": 30, "C": 20, "D": 15}
-        special_offers = {
-            "A": (3, 130), # (quantity, offer price)
-            "B": (2, 45),
+        # special_offers = {
+        #     "A": (3, 130), # (quantity, offer price)
+        #     "B": (2, 45),
+        # }
+        multi_offers = {
+        "A": [(5, 200), (3, 130)], # (quantity, offer price)
+        "B": [(2, 45)],
+            # C, D, E have no multi-pack price (E has a cross-item freebie instead)
         }
 
         # Validate input
@@ -40,4 +45,5 @@ class CheckoutSolution:
             total += num_offers * offer_price + remainder * prices[item]
 
         return total
+
 
