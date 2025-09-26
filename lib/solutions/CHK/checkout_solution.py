@@ -33,6 +33,11 @@ class CheckoutSolution:
             "N": ("M", 3),
             "R": ("Q", 3),
         }
+        # -------- Group discount offer --------
+        # .e.g. "Buy any 3 of (S,T,X,Y,Z) for 45"
+        self.group_offer_items = ("S", "T", "X", "Y", "Z")
+        self.group_offer_size = 3
+        self.group_offer_price = 45
 
     # skus = unicode string
     def checkout(self, skus: str) -> int:
@@ -83,6 +88,11 @@ class CheckoutSolution:
 
         return chargeable
 
+    def price_group_bundles(self, chargeable: dict) -> int:
+        """Apply group bundles"""
+        price_list = []
+        for sku in self.grou
+
     def price_with_offers(self, sku: str, qty: int) -> int:
         """Price qty units of sku applying multi-pack offers to benefit customer
         (largest pack first). Falls back to unit price for remainder.
@@ -105,6 +115,7 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
 
 
 
