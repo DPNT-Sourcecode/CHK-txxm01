@@ -1,7 +1,7 @@
 
 class CheckoutSolution:
     def __init__(self):
-        self.prices = {"A": 50, "B": 30, "C": 20, "D": 15}
+        self.prices = {"A": 50, "B": 30, "C": 20, "D": 15, "E": 40}
         self.multi_offers = {
         "A": [(5, 200), (3, 130)], # (quantity, offer price)
         "B": [(2, 45)],
@@ -48,6 +48,8 @@ class CheckoutSolution:
         else:
             effective_b_to_charge = counts.get("B", 0)
 
+        print(effective_b_to_charge)
+
         total = 0
         # Apply special offers
         for item, qty in counts.items():
@@ -88,4 +90,5 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
 
