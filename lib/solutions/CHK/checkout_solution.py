@@ -29,13 +29,21 @@ class CheckoutSolution:
             counts[sku] = counts.get(sku, 0) + 1
 
         # Handle special offer for E: for every 2 E purchased, one B is free
-        effective_b_to_charge = 0
-        if counts.get("E", 0) > 0 and counts.get("B", 0) > 0:
-            free_b = counts.get("E", 0) // 2
-            # Cannot get more free B than you actually have in the basket
-            effective_b_to_charge = max(0, counts.get("B", 0) - free_b)
-        else:
-            effective_b_to_charge = counts.get("B", 0)
+        b_count = counts.get("B", 0)
+        e_count = counts.get("E", 0)
+        free_b = e_count // 2
+        effective_b_to_charge = max(0, b_count - free_b)
+        # if counts.get("E", 0) > 0 and counts.get("B", 0) > 0:
+        #     free_b = counts.get("E", 0) // 2
+        #     # Cannot get more free B than you actually have in the basket
+        #     effective_b_to_charge = max(0, counts.get("B", 0) - free_b)
+        # else:
+        #     effective_b_to_charge = counts.get("B", 0)
+
+        # Handle special offer for F: buy 2Fs and get another F free
+        f_count = counts.get("F", 0)
+        free_f = f_count // 3  # for each 3 F, 1 is free
+        effective_f_to_charge = f_count - free_f
 
         total = 0
         # Apply special offers
@@ -69,3 +77,4 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
