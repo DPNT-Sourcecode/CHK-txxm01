@@ -33,12 +33,6 @@ class CheckoutSolution:
         e_count = counts.get("E", 0)
         free_b = e_count // 2
         effective_b_to_charge = max(0, b_count - free_b)
-        # if counts.get("E", 0) > 0 and counts.get("B", 0) > 0:
-        #     free_b = counts.get("E", 0) // 2
-        #     # Cannot get more free B than you actually have in the basket
-        #     effective_b_to_charge = max(0, counts.get("B", 0) - free_b)
-        # else:
-        #     effective_b_to_charge = counts.get("B", 0)
 
         # Handle special offer for F: buy 2Fs and get another F free
         f_count = counts.get("F", 0)
@@ -50,6 +44,9 @@ class CheckoutSolution:
         for item, qty in counts.items():
             if item in ["B"]:
                 qty = effective_b_to_charge
+
+            if item in ["F"]:
+                qty = effective_f_to_charge
 
             total += self.price_with_offers(item, qty)
 
@@ -77,4 +74,5 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
 
