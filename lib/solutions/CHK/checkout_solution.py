@@ -61,9 +61,16 @@ class CheckoutSolution:
 
         chargeable = self.chargeable_quantities(counts)
 
+        # Applu group discounts
+        bundle_total, chargeable = self.price_group_bundles(chargeable)
+
         total = 0
+        total += bundle_total
         # Apply special offers
         for item, qty in chargeable.items():
+            if qty <= 0:
+                continue
+
             total += self.price_with_offers(item, qty)
 
         return total
@@ -140,3 +147,4 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
