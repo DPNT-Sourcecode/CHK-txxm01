@@ -11,3 +11,12 @@ class TestSum():
         with pytest.raises(TypeError):
             SumSolution().compute('a', 2)
 
+    def test_sum_error_negative_number(self):
+        with pytest.raises(ValueError):
+            SumSolution().compute(-3, 2)
+
+    def test_sum_error_number_above_100(self):
+        with pytest.raises(ValueError):
+            SumSolution().compute(3, 105)
+
+
