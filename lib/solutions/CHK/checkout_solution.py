@@ -14,21 +14,29 @@ class CheckoutSolution:
         if not isinstance(skus, str):
             return -1
 
-        for sku in skus:
-            if sku not in prices:
-                print('sku: ', sku)
-                print()
+        # for sku in skus:
+        #     if sku not in prices:
+        #         print('sku: ', sku)
+        #         print()
 
-        validate = [sku.strip() for sku in skus if sku.strip() not in prices and sku.strip() != ""]
-        print('validate: ', validate)
+        # validate = [sku.strip() for sku in skus if sku.strip() not in prices and sku.strip() != ""]
+        # print('validate: ', validate)
 
-        if len(validate) > 0:
-            print('fail')
-            return -1
+        # if len(validate) > 0:
+        #     print('fail')
+        #     return -1
 
         # Count items in skus
         counts = {}
         for sku in skus:
+            sku = sku.strip()
+            # ignore empty strings
+            if not sku:
+                continue
+
+            if sku not in prices:
+                return -1
+
             counts[sku] = counts.get(sku, 0) + 1
 
         total = 0
