@@ -5,6 +5,11 @@ from lib.solutions.HLO.hello_solution import HelloSolution
 
 class TestHelloSolution():
     def test_hello_success(self):
-        assert HelloSolution().hello("Linda") == "Hello, World!"
+        assert HelloSolution().hello("Linda") == "Hello, Linda!"
+
+    def test_hello_error(self):
+        with pytest.raises(TypeError):
+            HelloSolution().hello(2)
+
 
 
