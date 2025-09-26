@@ -1,6 +1,6 @@
 
 class SumSolution:
-    def compute(self, x: int, y: int):
+    def compute(self, x: int, y: int) -> int:
         if not (isinstance(x, int) or isinstance(y, int)):
             raise TypeError("Expected both arguments to be integers")
 
@@ -13,4 +13,5 @@ class SumSolution:
             raise ValueError("Arguments must be between 0 and 100")
 
         return x + y
+
 
