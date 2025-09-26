@@ -1,19 +1,26 @@
 
 class CheckoutSolution:
-
-    # skus = unicode string
-    def checkout(self, skus: str) -> int:
-        # Prices and special offers
-        prices = {"A": 50, "B": 30, "C": 20, "D": 15}
-        # special_offers = {
-        #     "A": (3, 130), # (quantity, offer price)
-        #     "B": (2, 45),
-        # }
-        multi_offers = {
+    def __init__(self):
+        self.prices = {"A": 50, "B": 30, "C": 20, "D": 15}
+        self.multi_offers = {
         "A": [(5, 200), (3, 130)], # (quantity, offer price)
         "B": [(2, 45)],
             # C, D, E have no multi-pack price (E has a cross-item freebie instead)
         }
+
+    # skus = unicode string
+    def checkout(self, skus: str) -> int:
+        # Prices and special offers
+        # prices = {"A": 50, "B": 30, "C": 20, "D": 15}
+        # special_offers = {
+        #     "A": (3, 130), # (quantity, offer price)
+        #     "B": (2, 45),
+        # }
+        # multi_offers = {
+        # "A": [(5, 200), (3, 130)], # (quantity, offer price)
+        # "B": [(2, 45)],
+        #     # C, D, E have no multi-pack price (E has a cross-item freebie instead)
+        # }
 
         # Validate input
         if not isinstance(skus, str):
@@ -27,7 +34,7 @@ class CheckoutSolution:
             if not sku:
                 continue
 
-            if sku not in prices:
+            if sku not in self.prices:
                 return -1
 
             counts[sku] = counts.get(sku, 0) + 1
@@ -37,9 +44,9 @@ class CheckoutSolution:
         if counts.get("E", 0) > 0 and counts.get("B", 0) > 0:
             free_b = counts["E"] // 2
             # You cannot get more free B than you actually have in the basket
-            effective_b_to_charge = max(0, counts["B"] - free_b)
+            effective_b_to_charge = max(0, counts.get("B", 0) - free_b)
         else:
-            effective_b_to_charge = counts["B"]
+            effective_b_to_charge = counts.get("B", 0)
 
         total = 0
         # Apply special offers
@@ -56,18 +63,18 @@ class CheckoutSolution:
             if item in ["B", "E"] and effective_b_to_charge:
                 qty = effective_b_to_charge
 
-            total += self.price_with_offers(multi_offers, item, qty)
+            total += self.price_with_offers(item, qty)
 
         return total
 
-    def price_with_offers(self, multi_offers: dict, sku: str, qty: int) -> int:
+    def price_with_offers(self, sku: str, qty: int) -> int:
         # Price qty units of sku applying multi-pack offers to benefit customer
         # (largest pack first). Falls back to unit price for remainder.
         if qty <= 0:
             return 0
 
         total = 0
-        packs = multi_offers.get(sku, [])
+        packs = self.multi_offers.get(sku, [])
         # Make sure largest-first
         packs = sorted(packs, key=lambda x: x[0], reverse=True)
         remaining = qty
@@ -78,6 +85,7 @@ class CheckoutSolution:
             if n_packs:
                 total += n_packs * pack_price
 
-        total += remaining * prices[sku]
+        total += remaining * self.prices[sku]
 
         return total
+
