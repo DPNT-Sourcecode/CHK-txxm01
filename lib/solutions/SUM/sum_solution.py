@@ -13,5 +13,3 @@ class SumSolution:
             raise ValueError("Arguments must be between 0 and 100")
 
         return x + y
-
-

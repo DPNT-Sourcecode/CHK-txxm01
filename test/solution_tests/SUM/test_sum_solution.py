@@ -18,5 +18,3 @@ class TestSum():
     def test_sum_error_number_above_100(self):
         with pytest.raises(ValueError):
             SumSolution().compute(3, 105)
-
-
