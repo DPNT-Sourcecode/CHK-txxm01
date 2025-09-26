@@ -67,7 +67,7 @@ class CheckoutSolution:
             # num_offers, remainder = divmod(qty, offer_qty)
             # total += num_offers * offer_price + remainder * prices[item]
 
-            if item in ["B"] and effective_b_to_charge:
+            if item in ["B"]:
                 qty = effective_b_to_charge
             print('item: ', item, 'qty: ', qty)
             print()
@@ -97,6 +97,7 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
 
 
 
