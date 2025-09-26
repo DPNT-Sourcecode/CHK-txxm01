@@ -1,7 +1,7 @@
 
 class CheckoutSolution:
     def __init__(self):
-        self.prices = {"A": 50, "B": 30, "C": 20, "D": 15, "E": 40}
+        self.prices = {"A": 50, "B": 30, "C": 20, "D": 15, "E": 40, "F": 10}
         self.multi_offers = {
         "A": [(5, 200), (3, 130)], # (quantity, offer price)
         "B": [(2, 45)],
