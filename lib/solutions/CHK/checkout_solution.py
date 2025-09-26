@@ -61,8 +61,7 @@ class CheckoutSolution:
 
         chargeable = self.chargeable_quantities(counts)
 
-        # Applu group discounts
-        # bundle_total, chargeable = self.price_group_bundles(chargeable)
+        # Apply group discounts
         price_list = []
         for sku in self.group_offer_items:
             qty = chargeable.get(sku, 0)
@@ -70,26 +69,18 @@ class CheckoutSolution:
             if qty <= 0:
                 continue
 
-            price_list.append(self.prices[sku] * qty)
+            price_list.extend([self.prices[sku]] * qty)
             chargeable[sku] = 0
 
-        print('price_list: ', price_list)
-        print()
         bundle_total = 0
         if price_list:
             bundle_count = len(price_list) // self.group_offer_size
-            print('bundle_count: ', bundle_count)
-            print()
 
             price_list.sort(reverse=True)
             # Sum of bundled items
             bundle_prices = price_list[: bundle_count * self.group_offer_size]
-            print('bundle_prices: ', bundle_prices)
-            print()
             remaining_prices = price_list[bundle_count * self.group_offer_size :]
             bundle_total = bundle_count * self.group_offer_price + sum(remaining_prices)
-            print('bundle_total: ', bundle_total)
-            print()
 
         total = 0
         total += bundle_total
@@ -122,36 +113,6 @@ class CheckoutSolution:
 
         return chargeable
 
-    def price_group_bundles(self, chargeable: dict) -> tuple[int, dict]:
-        """Apply group bundles"""
-        # Flast price list for group items
-        price_list = []
-        for sku in self.group_offer_items:
-            qty = chargeable.get(sku, 0)
-
-            if qty <= 0:
-                continue
-
-            price_list.append(self.prices[sku] * qty)
-
-        if not price_list:
-            return 0
-
-        bundle_count = len(price_list) // self.group_offer_size
-
-        price_list.sort(reverse=True)
-        # Sum of bundled items
-        bundle_prices = price_list[:bundle_count * self.group_offer_size]
-        remaining_prices = price_list[bundle_count * self.group_offer_size:]
-        total = bundle_count * self.group_offer_price + sum(remaining_prices)
-
-        for sku in self.group_offer_items:
-            chargeable[sku] = 0
-
-        return total, chargeable
-
-
-
     def price_with_offers(self, sku: str, qty: int) -> int:
         """Price qty units of sku applying multi-pack offers to benefit customer
         (largest pack first). Falls back to unit price for remainder.
@@ -174,8 +135,3 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
-
-
-
-
-
