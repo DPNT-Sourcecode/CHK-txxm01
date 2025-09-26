@@ -1,6 +1,7 @@
 
 class CheckoutSolution:
     def __init__(self):
+        # Unit prices
         self.prices = {
             "A": 50, "B": 30, "C": 20, "D": 15, "E": 40, "F": 10,
             "G": 20, "H": 10, "I": 35, "J": 60, "K": 80, "L": 90,
@@ -8,14 +9,32 @@ class CheckoutSolution:
             "S": 30, "T": 20, "U": 40, "V": 50, "W": 20, "X": 90,
             "Y": 10, "Z": 50,
         }
+        # Multi-pack offers (largest-first will be enforced at runtime)
+        # Each entry is list of tuples: (pack_qty, pack_price)
         self.multi_offers = {
-            "A": [(5, 200), (3, 130)], # (quantity, offer price)
+            "A": [(5, 200), (3, 130)],
             "B": [(2, 45)],
             "H": [(10, 80), (5, 45)],
             "K": [(2, 150)],
             "P": [(5, 200)],
             "Q": [(3, 80)],
             "V": [(3, 130), (2, 90)],
+        }
+        # Self-freebies: for each group size, 1 free within the group
+        # F: 2F get 1F free => every 3 F, 1 is free  => chargeable = qty - qty//3
+        # U: 3U get 1U free => every 4 U, 1 is free  => chargeable = qty - qty//4
+        self.self_free_group: dict[str, int] = {
+            "F": 3,
+            "U": 4,
+        }
+        # Cross-item freebies: trigger_sku -> (target_sku, trigger_qty_for_one_free_target)
+        # E: every 2 E gives 1 B free
+        # N: every 3 N gives 1 M free
+        # R: every 3 R gives 1 Q free
+        self.cross_free: dict[str, tuple[str, int]] = {
+            "E": ("B", 2),
+            "N": ("M", 3),
+            "R": ("Q", 3),
         }
 
     # skus = unicode string
@@ -84,6 +103,3 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
-
-
-
