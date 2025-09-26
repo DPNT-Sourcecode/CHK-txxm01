@@ -54,39 +54,50 @@ class CheckoutSolution:
 
             counts[sku] = counts.get(sku, 0) + 1
 
-        # Handle special offer for E: for every 2 E purchased, one B is free
-        b_count = counts.get("B", 0)
-        e_count = counts.get("E", 0)
-        free_b = e_count // 2
-        effective_b_to_charge = max(0, b_count - free_b)
+        chargeable = self.chargeable_quantities(counts)
 
-        # Handle special offer for F: buy 2Fs and get another F free
-        f_count = counts.get("F", 0)
-        free_f = f_count // 3  # for each 3 F, 1 is free
-        effective_f_to_charge = f_count - free_f
+        # # Handle special offer for E: for every 2 E purchased, one B is free
+        # b_count = counts.get("B", 0)
+        # e_count = counts.get("E", 0)
+        # free_b = e_count // 2
+        # effective_b_to_charge = max(0, b_count - free_b)
+
+        # # Handle special offer for F: buy 2Fs and get another F free
+        # f_count = counts.get("F", 0)
+        # free_f = f_count // 3  # for each 3 F, 1 is free
+        # effective_f_to_charge = f_count - free_f
 
         total = 0
         # Apply special offers
-        for item, qty in counts.items():
-            if item in ["B"]:
-                qty = effective_b_to_charge
+        # for item, qty in counts.items():
+        for item, qty in chargeable.items():
+            # if item in ["B"]:
+            #     qty = effective_b_to_charge
 
-            if item in ["F"]:
-                qty = effective_f_to_charge
+            # if item in ["F"]:
+            #     qty = effective_f_to_charge
 
             total += self.price_with_offers(item, qty)
 
         return total
 
-    def chargeable_quantities(self, counts):
+    def chargeable_quantities(self, counts: dict):
         """Determine chargeable quantities"""
-        chargeable: dict[str, int] = dict(counts)
+        chargeable = counts
         # Apply freebies
         for sku, group in self.self_free_group.items():
             qty = counts.get(sku, 0)
             if qty > 0 and group > 1:
                 free_units = qty // group  # 1 free per full group
                 chargeable[sku] = max(0, qty - free_units)
+
+        # Apply cross-item freebies
+        for trigger, (target, trigger_qty) in self.cross_free.items():
+            tqty = counts.get(trigger, 0)
+            tgt_qty = chargeable.get(target, 0)
+            if tqty > 0 and tgt_qty > 0 and trigger_qty > 0:
+                free_units = tqty // trigger_qty
+                chargeable[target] = max(0, tgt_qty - free_units)
 
         return chargeable
 
@@ -112,3 +123,4 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
