@@ -21,16 +21,13 @@ class CheckoutSolution:
             "V": [(3, 130), (2, 90)],
         }
         # Self-freebies: for each group size, 1 free within the group
-        # F: 2F get 1F free => every 3 F, 1 is free  => chargeable = qty - qty//3
-        # U: 3U get 1U free => every 4 U, 1 is free  => chargeable = qty - qty//4
+        # .e.g. F: 2F get 1F free => every 3 F, 1 is free
         self.self_free_group: dict[str, int] = {
             "F": 3,
             "U": 4,
         }
         # Cross-item freebies: trigger_sku -> (target_sku, trigger_qty_for_one_free_target)
-        # E: every 2 E gives 1 B free
-        # N: every 3 N gives 1 M free
-        # R: every 3 R gives 1 Q free
+        # .e.g. E: every 2 E gives 1 B free
         self.cross_free: dict[str, tuple[str, int]] = {
             "E": ("B", 2),
             "N": ("M", 3),
@@ -80,6 +77,18 @@ class CheckoutSolution:
             total += self.price_with_offers(item, qty)
 
         return total
+
+    def chargeable_quantities(self, counts):
+        """Determine chargeable quantities"""
+        chargeable: dict[str, int] = dict(counts)
+        # Apply freebies
+        for sku, group in self.self_free_group.items():
+            qty = counts.get(sku, 0)
+            if qty > 0 and group > 1:
+                free_units = qty // group  # 1 free per full group
+                chargeable[sku] = max(0, qty - free_units)
+
+        return chargeable
 
     def price_with_offers(self, sku: str, qty: int) -> int:
         """Price qty units of sku applying multi-pack offers to benefit customer
