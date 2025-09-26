@@ -62,10 +62,30 @@ class CheckoutSolution:
         chargeable = self.chargeable_quantities(counts)
 
         # Applu group discounts
-        bundle_total, chargeable = self.price_group_bundles(chargeable)
+        # bundle_total, chargeable = self.price_group_bundles(chargeable)
+        price_list = []
+        for sku in self.group_offer_items:
+            qty = chargeable.get(sku, 0)
 
-        total = 0
-        total += bundle_total
+            if qty <= 0:
+                continue
+
+            price_list.append(self.prices[sku] * qty)
+            chargeable[sku] = 0
+
+        if not price_list:
+            return 0
+
+        bundle_count = len(price_list) // self.group_offer_size
+
+        price_list.sort(reverse=True)
+        # Sum of bundled items
+        # bundle_prices = price_list[:bundle_count * self.group_offer_size]
+        remaining_prices = price_list[bundle_count * self.group_offer_size:]
+
+        total = bundle_count * self.group_offer_price + sum(remaining_prices)
+
+        # total = 0
         # Apply special offers
         for item, qty in chargeable.items():
             if qty <= 0:
@@ -147,4 +167,5 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
+
 
