@@ -32,7 +32,8 @@ class CheckoutSolution:
 
             counts[sku] = counts.get(sku, 0) + 1
 
-         # Handle special offer for E: for every 2 E purchased, one B is free
+        # Handle special offer for E: for every 2 E purchased, one B is free
+        effective_b_to_charge = 0
         if counts["E"] > 0 and counts["B"] > 0:
             free_b = counts["E"] // 2
             # You cannot get more free B than you actually have in the basket
@@ -49,12 +50,17 @@ class CheckoutSolution:
 
             # offer_qty, offer_price = special_offers[item]
             # Check how many offers apply
-            num_offers, remainder = divmod(qty, offer_qty)
-            total += num_offers * offer_price + remainder * prices[item]
+            # num_offers, remainder = divmod(qty, offer_qty)
+            # total += num_offers * offer_price + remainder * prices[item]
+
+            if item in ["B", "E"] and effective_b_to_charge:
+                qty = effective_b_to_charge
+
+            total += self.price_with_offers(multi_offers, item, qty)
 
         return total
 
-    def price_with_offers(multi_offers: dict, sku: str, qty: int) -> int:
+    def price_with_offers(self, multi_offers: dict, sku: str, qty: int) -> int:
         # Price qty units of sku applying multi-pack offers to benefit customer
         # (largest pack first). Falls back to unit price for remainder.
         if qty <= 0:
@@ -75,5 +81,6 @@ class CheckoutSolution:
         total += remaining * prices[sku]
 
         return total
+
 
 
