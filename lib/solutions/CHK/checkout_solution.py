@@ -34,7 +34,7 @@ class CheckoutSolution:
 
         # Handle special offer for E: for every 2 E purchased, one B is free
         effective_b_to_charge = 0
-        if counts["E"] > 0 and counts["B"] > 0:
+        if counts.get("E") > 0 and counts.get("B") > 0:
             free_b = counts["E"] // 2
             # You cannot get more free B than you actually have in the basket
             effective_b_to_charge = max(0, counts["B"] - free_b)
@@ -81,6 +81,3 @@ class CheckoutSolution:
         total += remaining * prices[sku]
 
         return total
-
-
-

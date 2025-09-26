@@ -15,5 +15,3 @@ class TestCheckoutSolution():
 
     def test_checkout_fail_input_int(self):
         assert CheckoutSolution().checkout(100) == -1
-
-
