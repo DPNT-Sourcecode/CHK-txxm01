@@ -7,6 +7,3 @@ class HelloSolution:
             raise TypeError("Expected argument to be a string")
 
         return f"Hello, {friend_name}!"
-
-
-

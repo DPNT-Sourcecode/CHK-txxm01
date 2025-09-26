@@ -10,6 +10,3 @@ class TestHelloSolution():
     def test_hello_error(self):
         with pytest.raises(TypeError):
             HelloSolution().hello(2)
-
-
-
