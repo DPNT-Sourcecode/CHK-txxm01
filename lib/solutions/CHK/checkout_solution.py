@@ -17,6 +17,7 @@ class CheckoutSolution:
         validate = [sku for sku in skus if sku not in prices]
 
         if len(validate) > 0:
+            print('fail')
             return -1
 
         # Count items in skus
@@ -37,4 +38,5 @@ class CheckoutSolution:
             total += num_offers * offer_price + remainder * prices[item]
 
         return total
+
 
