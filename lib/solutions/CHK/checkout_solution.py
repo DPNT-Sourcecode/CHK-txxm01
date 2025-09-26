@@ -115,7 +115,3 @@ class CheckoutSolution:
         total += remaining * self.prices[sku]
 
         return total
-
-
-
-
